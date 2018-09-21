@@ -1,0 +1,46 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url "http://repo.spring.io/snapshot" }
+        maven { url "http://repo.spring.io/milestone" }
+    }
+
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.2.1.RELEASE"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "https://repo.spring.io/libs-release" }
+}
+
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web",
+            'org.springframework.ldap:spring-ldap-core:2.0.2.RELEASE',
+            'org.springframework:spring-tx',
+            'com.fasterxml.jackson.core:jackson-databind:2.2.3',
+            'com.google.guava:guava:15.0',
+            'org.springframework.boot:spring-boot-starter-thymeleaf',
+            'org.codehaus.jackson:jackson-mapper-asl:1.9.2'
+
+
+    runtime 'ch.qos.logback:logback-classic:1.0.13'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = gradleVersion
+    distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+}
+
+bootRun {
+    if (System.getProperty('DEBUG', 'false') == 'true') {
+        jvmArgs '-Xdebug',
+                '-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005'
+    }
+}
